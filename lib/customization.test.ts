@@ -1,0 +1,1 @@
+import {describe,expect,it} from "vitest";import {createCustomizationId} from "./customization";describe("customization ids",()=>{it("creates a readable id",()=>{expect(createCustomizationId(new Date("2026-09-29T10:00:00Z"))).toMatch(/^CUST-20260929-\\d{6}$/)})});
