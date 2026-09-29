@@ -1,0 +1,1 @@
+export function Footer(){return <footer className="mt-20 border-t border-neutral-200 bg-white"><div className="container flex flex-col gap-3 py-10 text-sm text-neutral-500 sm:flex-row sm:items-center sm:justify-between"><span>© {new Date().getFullYear()} Custom T-Shirt Studio</span><span>Demo Mode · Shopify not connected</span></div></footer>}
