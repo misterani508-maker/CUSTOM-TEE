@@ -1,0 +1,14 @@
+generator client { provider = "prisma-client-js" }
+datasource db { provider = "postgresql" url = env("DATABASE_URL") }
+model User { id String @id @default(cuid()) email String @unique createdAt DateTime @default(now()) customizations Customization[] }
+model Admin { id String @id @default(cuid()) email String @unique createdAt DateTime @default(now()) }
+model TshirtProduct { id String @id name String gsm Int sleeveType String basePrice Int active Boolean @default(true) createdAt DateTime @default(now()) updatedAt DateTime @updatedAt variants TshirtVariant[] customizations Customization[] }
+model TshirtVariant { id String @id productId String colourId String sizeId String shopifyVariantId String? product TshirtProduct @relation(fields:[productId],references:[id],onDelete:Cascade) colour Colour @relation(fields:[colourId],references:[id]) size Size @relation(fields:[sizeId],references:[id]) @@unique([productId,colourId,sizeId]) }
+model Colour { id String @id name String @unique hex String variants TshirtVariant[] }
+model Size { id String @id name String @unique sortOrder Int variants TshirtVariant[] }
+model DesignCategory { id String @id name String @unique active Boolean @default(true) sortOrder Int @default(0) designs Design[] }
+model Design { id String @id name String description String? categoryId String category DesignCategory @relation(fields:[categoryId],references:[id]) previewImage String productionFileRef String price Int active Boolean @default(true) sortOrder Int @default(0) tags String[] placements DesignPlacement[] items CustomizationItem[] createdAt DateTime @default(now()) updatedAt DateTime @updatedAt }
+model DesignPlacement { id String @id designId String placement String design Design @relation(fields:[designId],references:[id],onDelete:Cascade) @@unique([designId,placement]) }
+model Customization { id String @id @default(cuid()) code String @unique userId String? productId String colour String size String totalPrice Int previewImageRef String? user User? @relation(fields:[userId],references:[id]) product TshirtProduct @relation(fields:[productId],references:[id]) items CustomizationItem[] createdAt DateTime @default(now()) updatedAt DateTime @updatedAt }
+model CustomizationItem { id String @id @default(cuid()) customizationId String designId String placement String unitPrice Int productionFileRef String customization Customization @relation(fields:[customizationId],references:[id],onDelete:Cascade) design Design @relation(fields:[designId],references:[id]) }
+model PriceRule { id String @id @default(cuid()) name String amount Int active Boolean @default(true) metadata Json? createdAt DateTime @default(now()) }
